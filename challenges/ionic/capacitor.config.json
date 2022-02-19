@@ -1,0 +1,6 @@
+{
+	"appId": "io.ionic.starter",
+	"appName": "CarOnSale",
+	"webDir": "www",
+	"bundledWebRuntime": false
+}
