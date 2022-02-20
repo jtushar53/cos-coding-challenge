@@ -1,0 +1,24 @@
+<ion-content fullscreen="true" class="ion-padding">
+
+
+
+<form [formGroup]="loginForm">
+  <ion-list  color="secondary">
+    <ion-item fill="outline" class="ion-margin-bottom">
+      <ion-label position="floating">Enter Email</ion-label>
+      <ion-input type="Email"  formControlName="email" autocomplete="off"></ion-input>
+      <ion-note color="danger" slot="error">Valid email is required</ion-note>
+
+    </ion-item>
+    <ion-item fill="outline">
+      <ion-label position="floating" >Enter Password</ion-label>
+      <ion-input type="password" formControlName="password"  autocomplete="off"></ion-input>
+      <ion-note color="danger" slot="error">Valid password is required</ion-note>
+    </ion-item>
+    <ion-row class="ion-justify-content-center">
+      <ion-button size="large" (click)="login()"> Login</ion-button>
+    </ion-row>
+  </ion-list>
+</form>
+
+</ion-content>
