@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
+import { AlertController } from '@ionic/angular';
 import { AuthService } from '../../auth.service';
 
 //TODO: Below line need to be moved to a constant file, regex taken from http://emailregex.com/
@@ -14,7 +15,7 @@ const EMAIL_REGEX = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"
 })
 export class LoginPage implements OnInit {
   loginForm: FormGroup;
-  constructor(private fb: FormBuilder, private router: Router, private auth: AuthService) { }
+  constructor(private fb: FormBuilder, private router: Router, private auth: AuthService, private alertController: AlertController) { }
 
   ngOnInit() {
     this.loginForm = this.fb.group({
@@ -32,6 +33,14 @@ export class LoginPage implements OnInit {
           meta: 'mobileapp'
         }).subscribe(async response => {
           await this.router.navigate(['home']);
+        }, async error => {
+          debugger;
+          const alert = await this.alertController.create({
+            header: 'Login Failed',
+            subHeader: error.message,
+            buttons: ['OK']
+          });
+          await alert.present();
         })
         
       }

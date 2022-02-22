@@ -62,12 +62,9 @@ export class AuthService
         }
         return this._httpClient.put(`authentication/${credentials.email}`, credentials).pipe(
             tap({
-                next: (response: any) => from( this.setAccessToken(response.token)),
-                error: err => throwError('unauthorised user')
-            }),
-            tap({
-                next: (response: any) => from( this.setUserId(response.userId)),
-                error: err => throwError('unauthorised user')
+                next: (response: any) => forkJoin([
+                    from( this.setAccessToken(response.token)), from( this.setUserId(response.userId))
+                ])
             }),
             switchMap((response: any) => {
                 this._authenticated = true;
@@ -77,7 +74,7 @@ export class AuthService
             }),
             catchError((error) => { 
                 this._authenticated = false;
-                return throwError('unauthorised user')
+                return throwError(error.error)
             })
         );
     }

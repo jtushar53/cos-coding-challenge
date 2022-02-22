@@ -26,8 +26,6 @@ export class AuthInterceptor implements HttpInterceptor
             from(this._authService.getAccessToken()), from(this._authService.getUserId())
         ]).pipe(
             switchMap(tokenWithUserid => {
-
-                console.log(tokenWithUserid);
                const headers = new HttpHeaders()
                         .set('authtoken', tokenWithUserid[0])
                         .set('userid', tokenWithUserid[1]);

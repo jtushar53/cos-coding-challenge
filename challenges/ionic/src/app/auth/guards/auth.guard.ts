@@ -16,13 +16,11 @@ export class AuthGuard implements CanActivate, CanActivateChild {
   canActivate(
     route: ActivatedRouteSnapshot,
     state: RouterStateSnapshot): Observable<boolean | UrlTree> | Promise<boolean | UrlTree> | boolean | UrlTree {
-      console.log(state);
       return this._check('auth');
   }
   canActivateChild(
     childRoute: ActivatedRouteSnapshot,
     state: RouterStateSnapshot): Observable<boolean | UrlTree> | Promise<boolean | UrlTree> | boolean | UrlTree {
-      console.log(state);
     return this._check('auth');
   }
 
@@ -33,19 +31,19 @@ export class AuthGuard implements CanActivate, CanActivateChild {
   private _check(redirectURL: string): Observable<boolean>
     {
         return this._authService.check()
-                   .pipe(
-                       switchMap((authenticated) => {
-                        if (!authenticated)
-                        {
-                           return of(false)
-                        }
-                        return of(true);
-                       }),
-                       tap({
-                          next: (authenticated: any) => !authenticated && from(this._router.navigate(['auth/login']) ),
-                          error: err => throwError('unauthorised user')
-                        })
-                   );
+        .pipe(
+            switchMap((authenticated) => {
+            if (!authenticated)
+            {
+                return of(false)
+            }
+            return of(true);
+            }),
+            tap({
+              next: (authenticated: any) => !authenticated && from(this._router.navigate(['auth/login']) ),
+              error: err => throwError('unauthorised user')
+            })
+        );
     }
 
 }
