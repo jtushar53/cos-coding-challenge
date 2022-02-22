@@ -10,8 +10,8 @@ export const AUTH_TOKEN_INTERCEPTOR_FILTER =
        new InjectionToken<(req: HttpRequest<any>) => boolean>('Nebular Interceptor Filter');
 
 export function filterInterceptorRequest(req: HttpRequest<any>) {
-  return ['authentication/',
-          'anyotherurl',
+  return ['/authentication/',
+          'anyotherurl'
          ]
     .some(url => req.url.includes(url));
 }

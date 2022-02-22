@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
-import { from, Observable, of, throwError } from 'rxjs';
-import { switchMap, catchError, tap } from 'rxjs/operators';
+import { forkJoin, from, Observable, of, throwError } from 'rxjs';
+import { switchMap, tap, switchMapTo, catchError } from 'rxjs/operators';
 import { UserService } from '../services/user.service';
 import { Storage } from '@ionic/storage-angular';
 
@@ -12,6 +12,7 @@ import { Storage } from '@ionic/storage-angular';
 export class AuthService
 {
     _accessToken: string;
+    _userid: string;
     private _authenticated: boolean = false;
     constructor(
         private _httpClient: HttpClient,
@@ -20,36 +21,41 @@ export class AuthService
     )
     {
     }
-
+    //TODO need to merge access token and user id, as both are used in interceptor
     setAccessToken(token: string): Promise<any>{
+        this._accessToken = token;
         return this.storage.set('authtoken', token);
     }
 
     getAccessToken(): Promise<string>{
+        if(this._accessToken) Promise.resolve(this._accessToken);
         return this.storage.get('authtoken');
     }
 
     clearAccessToken(): Promise<string>{
+        this._accessToken = null;
         return this.storage.remove('authtoken');
     }
 
 
-    setUserId(token: string): Promise<any>{
-        return this.storage.set('userid', token);
+    setUserId(userid: string): Promise<any>{
+        this._userid = userid;
+        return this.storage.set('userid', userid);
     }
 
     getUserId(): Promise<string>{
+        if(this._userid) Promise.resolve(this._userid);
         return this.storage.get('userid');
     }
 
     clearUserid(): Promise<string>{
+        this._userid = null;
         return this.storage.remove('userid');
     }
 
     //TODO: need create a type for credentials
     signIn(credentials: { email: string; password: string; meta: string  }): Observable<any>
     {
-        debugger;
         if ( this._authenticated )
         {
             return throwError('User is already logged in.');
@@ -68,15 +74,20 @@ export class AuthService
                 delete response.token;
                 this._userService.user = response;
                 return of(response);
+            }),
+            catchError((error) => { 
+                this._authenticated = false;
+                return throwError('unauthorised user')
             })
         );
     }
 
     signOut(): Observable<any>
     {
-        from(this.clearAccessToken()).subscribe();
         this._authenticated = false;
-        return of(true);
+        return from(this.clearAccessToken()).pipe(
+            switchMapTo(of(true))
+        );
     }
     
     async verifyAndRefreshToken(): Promise<Observable<boolean>>
@@ -85,6 +96,23 @@ export class AuthService
         {
             return of(true);
         }
+        //TODO: extract jwt and verify token expiry, if expired refresh token
+    }
+
+    check(): Observable<boolean>
+    {
+        if(this._accessToken && this._userid) {
+            this._authenticated = true;
+            return of(this._authenticated);
+        }
+        return forkJoin([
+            from(this.getAccessToken()),
+            from(this.getUserId())
+        ]).pipe(switchMap(tokenanduserid => {
+            (tokenanduserid[0] && tokenanduserid[1]) ? this._authenticated = true : this._authenticated = false;
+            return of(this._authenticated);
+        }))
         //TODO: extract jwt and verify token expiry 
+        
     }
 }

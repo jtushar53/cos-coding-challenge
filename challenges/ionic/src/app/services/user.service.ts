@@ -9,7 +9,6 @@ export class UserService {
   _user: ReplaySubject<any> = new ReplaySubject<any>(1);
   set user(value: any)
   {
-    debugger;
       this._user.next(value);
   }
 
