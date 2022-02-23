@@ -11,7 +11,6 @@ export class VehicleInfoPage implements OnInit {
   constructor(private route: ActivatedRoute) { }
 
   ngOnInit() {
-    debugger;
     const auctionId = this.route.snapshot.queryParamMap.get('auctionId');
     console.log(auctionId)
   }

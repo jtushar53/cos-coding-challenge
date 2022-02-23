@@ -1,9 +1,10 @@
 import { Inject, Injectable, InjectionToken } from '@angular/core';
 import { HttpErrorResponse, HttpEvent, HttpHandler, HttpHeaders, HttpInterceptor, HttpRequest } from '@angular/common/http';
-import { forkJoin, from, merge, Observable, throwError } from 'rxjs';
-import { catchError, switchMap } from 'rxjs/operators';
+import { forkJoin, from, merge, Observable, of, throwError } from 'rxjs';
+import { catchError, map, switchMap, tap } from 'rxjs/operators';
 import { AuthService } from './auth.service';
 import { AUTH_TOKEN_INTERCEPTOR_FILTER } from './auth.module';
+import { JwtUtil } from './jwt.util';
 
 
 
@@ -22,13 +23,19 @@ export class AuthInterceptor implements HttpInterceptor
     {
         let newReq = req.clone({ url: `${this.baseUrl}/${req.url}` });
         if (!this.filter(newReq)) {
-        return forkJoin([
-            from(this._authService.getAccessToken()), from(this._authService.getUserId())
-        ]).pipe(
-            switchMap(tokenWithUserid => {
+        return this._authService.getUserInfo().pipe(
+            switchMap((userInfo => {
+                    (!userInfo.token || !userInfo.userid) && throwError('unauthorised');
+                    if(JwtUtil.isTokenExpired(userInfo.token, 3600)) {
+                        return this._authService.verifyAndRefreshToken();
+                    }
+                    return of(userInfo);
+                })
+            ),
+            switchMap(userInfo => {
                const headers = new HttpHeaders()
-                        .set('authtoken', tokenWithUserid[0])
-                        .set('userid', tokenWithUserid[1]);
+                        .set('authtoken', userInfo.token)
+                        .set('userid', userInfo.userId);
                const requestClone = newReq.clone({
                  headers 
                 });

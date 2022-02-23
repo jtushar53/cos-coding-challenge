@@ -1,8 +1,7 @@
 import { Component, OnInit } from '@angular/core';
-import { Router } from '@angular/router';
 import { map } from 'rxjs/operators';
+import { AuthService } from 'src/app/auth/auth.service';
 import { AuctionService } from 'src/app/services/auction.service';
-import { UserService } from 'src/app/services/user.service';
 
 @Component({
   selector: 'app-home',
@@ -11,7 +10,7 @@ import { UserService } from 'src/app/services/user.service';
 })
 export class HomePage implements OnInit {
   $auctions
-  constructor(private userService: UserService, private auction: AuctionService) {}
+  constructor(private auction: AuctionService) {}
 
   ngOnInit(){
     this.$auctions = this.auction.getAllAuctionForSalesMan().pipe(

@@ -16,9 +16,9 @@ export class AuctionService {
       delay(100),
       startWith(0),
       switchMap(() => {
-        return from(this.auth.getUserId()).pipe(
-          switchMap((userId) => {
-            return this._httpClient.get(`auction/salesman/${userId}/_all/bidding-data`)
+        return this.auth.getUserInfo().pipe(
+          switchMap((userInfo) => {
+            return this._httpClient.get(`auction/salesman/${userInfo?.userId}/_all/bidding-data`)
           })
         );
       })
