@@ -1,7 +1,9 @@
 import { Component, OnInit } from '@angular/core';
-import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { AbstractControl, FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
 import { AlertController } from '@ionic/angular';
+import { Observable, of, throwError, timer } from 'rxjs';
+import { catchError, switchMap } from 'rxjs/operators';
 import { AuthService } from '../../auth.service';
 
 //TODO: Below line need to be moved to a constant file, regex taken from http://emailregex.com/
@@ -19,7 +21,7 @@ export class LoginPage implements OnInit {
 
   ngOnInit() {
     this.loginForm = this.fb.group({
-      email: ['buyer-challenge@caronsale.de', [Validators.required, Validators.pattern(EMAIL_REGEX)]],
+      email: ['buyer-challenge@caronsale.de', [Validators.required, Validators.pattern(EMAIL_REGEX)],[this.checkEmailRegistered.bind(this)] ],
       password: ['Test123.', [Validators.required]],
     });
   }
@@ -34,7 +36,6 @@ export class LoginPage implements OnInit {
         }).subscribe(async response => {
           await this.router.navigate(['home']);
         }, async error => {
-          debugger;
           const alert = await this.alertController.create({
             header: 'Login Failed',
             subHeader: error.message,
@@ -49,4 +50,15 @@ export class LoginPage implements OnInit {
     }
   }
 
+  checkEmailRegistered(
+    control: AbstractControl
+  ): Observable<{ [key: string]: any } | null> {
+    if (control.value === null || control.value.length === 0) {
+      return of(null);
+    } else {
+      return timer(1000).pipe(
+        switchMap(() => this.auth.emailRegistered(control.value)),
+      );
+    }
+  }
 }

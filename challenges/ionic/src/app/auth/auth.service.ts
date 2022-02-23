@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { forkJoin, from, Observable, of, throwError } from 'rxjs';
-import { switchMap, tap, switchMapTo, catchError } from 'rxjs/operators';
+import { switchMap, tap, switchMapTo, catchError, map } from 'rxjs/operators';
 import { UserService } from '../services/user.service';
 import { Storage } from '@ionic/storage-angular';
 
@@ -111,5 +111,18 @@ export class AuthService
         }))
         //TODO: extract jwt and verify token expiry 
         
+    }
+
+    emailRegistered(email){
+        return this._httpClient.get(`authentication/${email}/registered`)
+        .pipe(
+            map(res => {
+              if (res) return of(null);
+            }),
+            catchError((error) => { 
+                if(error.status === 404) return of({ registered: false })
+                return of(null);//TODO: can add one more field to identify if server is not available
+            })
+        );
     }
 }

@@ -7,8 +7,10 @@
     <ion-item fill="outline" class="ion-margin-bottom">
       <ion-label position="floating">Enter Email</ion-label>
       <ion-input type="Email"  formControlName="email" autocomplete="off"></ion-input>
-      <ion-note color="danger" slot="error">Valid email is required</ion-note>
-
+      <ion-note color="danger" slot="error"  *ngIf="loginForm.controls['email'].errors?.pattern">Valid email is required</ion-note>
+      <ion-note color="danger" slot="error" *ngIf="loginForm.controls['email'].errors?.registered === false">Email not registered</ion-note>
+      <ion-icon slot="end" name="checkmark-sharp" color="success" *ngIf="loginForm.controls['email'].touched && loginForm.controls['email'].valid"></ion-icon>
+      <ion-icon slot="end" name="close-sharp" color="danger" *ngIf="loginForm.controls['email'].touched && loginForm.controls['email'].invalid"></ion-icon>
     </ion-item>
     <ion-item fill="outline">
       <ion-label position="floating" >Enter Password</ion-label>

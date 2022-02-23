@@ -44,6 +44,7 @@ export class AuthGuard implements CanActivate, CanActivateChild {
               error: err => throwError('unauthorised user')
             })
         );
-    }
+  }
+
 
 }

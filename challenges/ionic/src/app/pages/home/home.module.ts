@@ -6,6 +6,7 @@ import { HomePage } from './home.page';
 
 import { HomePageRoutingModule } from './home-routing.module';
 import { CountdownModule } from 'ngx-countdown';
+import { RouterModule } from '@angular/router';
 
 
 @NgModule({
@@ -14,7 +15,8 @@ import { CountdownModule } from 'ngx-countdown';
     FormsModule,
     IonicModule,
     HomePageRoutingModule,
-    CountdownModule
+    CountdownModule,
+    RouterModule
   ],
   declarations: [HomePage]
 })

@@ -22,6 +22,12 @@ const routes: Routes = [
     canActivate: [NoAuthGuard],
     canActivateChild: [NoAuthGuard],
   },
+  {
+    path: 'vehicle-info',
+    loadChildren: () => import('./pages/vehicle-info/vehicle-info.module').then( m => m.VehicleInfoPageModule),
+    canActivate: [AuthGuard],
+    canActivateChild: [AuthGuard],
+  },
 ];
 
 @NgModule({
