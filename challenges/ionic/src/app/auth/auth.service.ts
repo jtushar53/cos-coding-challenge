@@ -72,6 +72,10 @@ export class AuthService
                     switchMap((response: any) => this.setUserInfo(response)),
                     switchMap((updatedUserInfo: any) => {
                         return of(userInfo);
+                    }),
+                    catchError((error) => { 
+                        this._authenticated = false;
+                        return throwError(error)
                     })
                 );
             })
