@@ -1,4 +1,5 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ViewChild } from '@angular/core';
+import { IonContent } from '@ionic/angular';
 import { map } from 'rxjs/operators';
 import { AuthService } from 'src/app/auth/auth.service';
 import { AuctionService } from 'src/app/services/auction.service';
@@ -10,12 +11,16 @@ import { AuctionService } from 'src/app/services/auction.service';
 })
 export class HomePage implements OnInit {
   $auctions
-  constructor(private auction: AuctionService) {}
+  @ViewChild(IonContent) content: IonContent;
+  constructor(private auctionService: AuctionService) {}
 
   ngOnInit(){
-    this.$auctions = this.auction.getAllAuctionForSalesMan().pipe(
+    this.$auctions = this.auctionService.getAllAuctionForSalesMan().pipe(
       map((auctions) => auctions.sort((firstAuction, secondAuction) => secondAuction.currentHighestBidValue - firstAuction.currentHighestBidValue))
     );
   }
 
+  itemTrackBy(index: number, auction) {
+    return auction.uuid;
+  }
 }

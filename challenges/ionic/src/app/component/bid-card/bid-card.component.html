@@ -1,0 +1,12 @@
+<ion-card> 
+   <ion-item>
+      <ion-thumbnail slot="start">
+        <img #img src="./assets/icon/car.png">
+      </ion-thumbnail>
+      <div slots="end" class="bidding-info">
+        <p>Bids:{{auction?.currentHighestBidValue}}</p>
+        <p><span class="time-remaining">Time Remaining </span>  <countdown [config]="{ leftTime: auction?.remainingTimeInSeconds, format: 'hh:mm:ss' }"></countdown></p>
+      </div>
+     {{auction?.vehicle?.id}}
+    </ion-item>
+</ion-card>

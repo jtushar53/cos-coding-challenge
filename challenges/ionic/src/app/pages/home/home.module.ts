@@ -1,12 +1,12 @@
-import { NgModule } from '@angular/core';
+import { CUSTOM_ELEMENTS_SCHEMA, NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { IonicModule } from '@ionic/angular';
 import { FormsModule } from '@angular/forms';
 import { HomePage } from './home.page';
 
 import { HomePageRoutingModule } from './home-routing.module';
-import { CountdownModule } from 'ngx-countdown';
 import { RouterModule } from '@angular/router';
+import { BidCardModule } from 'src/app/component/bid-card/bid-card.module';
 
 
 @NgModule({
@@ -15,9 +15,10 @@ import { RouterModule } from '@angular/router';
     FormsModule,
     IonicModule,
     HomePageRoutingModule,
-    CountdownModule,
-    RouterModule
+    RouterModule,
+    BidCardModule
   ],
-  declarations: [HomePage]
+  declarations: [HomePage],
+  schemas: [ CUSTOM_ELEMENTS_SCHEMA ]
 })
 export class HomePageModule {}

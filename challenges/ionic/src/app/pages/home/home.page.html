@@ -7,14 +7,8 @@
 </ion-header>
 
 <ion-content [fullscreen]="true">
-<ion-list>
-  <ion-item *ngFor="let auction of ($auctions | async)"  [routerLink]="['/vehicle-info']"
-  [queryParams]="{ auctionId: auction?.uuid}">
-    <ion-thumbnail slot="start">
-      <img src="https://gravatar.com/avatar/dba6bae8c566f9d4041fb9cd9ada7741?d=identicon&f=y">
-    </ion-thumbnail>
-    <ion-label>Bids:{{auction?.currentHighestBidValue}}</ion-label>
-    <countdown [config]="{ leftTime: auction?.remainingTimeInSeconds, format: 'hh:mm:ss' }"></countdown>
-  </ion-item>
-</ion-list>
+  
+<bid-card *ngFor="let auction of ($auctions | async); trackBy: itemTrackBy" [routerLink]="['/vehicle-info']"
+[queryParams]="{ auctionId: auction?.uuid}" [auction]="auction" [view]="content">
+</bid-card>
 </ion-content>

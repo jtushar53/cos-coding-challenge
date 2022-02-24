@@ -1,0 +1,19 @@
+ion-item{
+    --padding-start:8px;
+    --padding-end:8px
+  }
+  .bidding-info{
+    display: inline-block;
+  height: 100%;
+  width: 100%;
+  }
+  ion-thumbnail{
+    height:10rem;
+    width:10rem;
+    img{
+      border: 1px solid #d9d9d9;
+    }
+  }
+  .time-remaining{
+    font-size: smaller;
+  }
