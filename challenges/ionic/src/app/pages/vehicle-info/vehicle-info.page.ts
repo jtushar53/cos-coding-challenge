@@ -7,12 +7,16 @@ import { ActivatedRoute } from '@angular/router';
   styleUrls: ['./vehicle-info.page.scss'],
 })
 export class VehicleInfoPage implements OnInit {
-
+  slideOpts = {
+    initialSlide: 1,
+    speed: 400
+  };
+  vehicle;
   constructor(private route: ActivatedRoute) { }
 
   ngOnInit() {
-    const auctionId = this.route.snapshot.queryParamMap.get('auctionId');
-    console.log(auctionId)
+    this.vehicle = history.state.vehicle;
+    console.log( this.vehicle);
   }
 
 }

@@ -1,9 +1,26 @@
-<ion-header>
-  <ion-toolbar>
-    <ion-title>vehicle-info</ion-title>
+<ion-header collapse="fade" [translucent]="true" class="ion-no-border">
+  <ion-toolbar color="primary">
+    <ion-buttons slot="start">
+      <ion-back-button></ion-back-button>
+    </ion-buttons>
+    <ion-title>
+     Car Info
+    </ion-title>
   </ion-toolbar>
 </ion-header>
-
 <ion-content>
+  <ion-slides pager="true" [options]="slideOpts">
+    <ion-slide *ngFor="let image of vehicle?.associatedVehicle?.vehicleImages">
+      <img [src]="image.url"/>
+    </ion-slide>
+  </ion-slides>
+  <ion-row>
+    <ion-col>
+     
+      <h3>{{vehicle?.associatedVehicle?.ez.split('/')[1]}} {{vehicle?.label}} <span *ngIf="vehicle?.model">({{vehicle?.model}})</span> </h3>
+      <p><span *ngIf="vehicle?.associatedVehicle?.mileageInKm">{{vehicle?.associatedVehicle?.mileageInKm}}KM</span> &#183; <span *ngIf="vehicle?.associatedVehicle?.fuelType"><b> </b>{{(vehicle?.associatedVehicle?.fuelType === 2) ? 'Petrol': 'Deisel'}}</span>
+        &#183; <span *ngIf="vehicle?.associatedVehicle?.numSeats">{{vehicle?.associatedVehicle?.numSeats}} Seater</span> </p>
+    </ion-col>
+  </ion-row>
 
 </ion-content>

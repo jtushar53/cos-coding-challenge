@@ -1,4 +1,4 @@
-<ion-header [translucent]="true">
+<ion-header collapse="fade" [translucent]="true">
   <ion-toolbar color="primary">
     <ion-title>
       Bids for today
@@ -9,6 +9,6 @@
 <ion-content [fullscreen]="true">
   
 <bid-card *ngFor="let auction of ($auctions | async); trackBy: itemTrackBy" [routerLink]="['/vehicle-info']"
-[queryParams]="{ auctionId: auction?.uuid}" [auction]="auction" [view]="content">
+[state]="{vehicle: auction?.vehicle}" [auction]="auction" [view]="content">
 </bid-card>
 </ion-content>

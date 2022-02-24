@@ -1,7 +1,7 @@
-import { HttpClient, HttpErrorResponse } from '@angular/common/http';
+import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { from, interval, Observable, throwError } from 'rxjs';
-import { catchError, delay, startWith, switchMap, switchMapTo, tap } from 'rxjs/operators';
+import { interval, Observable} from 'rxjs';
+import { delay, startWith, switchMap } from 'rxjs/operators';
 import { AuthService } from '../auth/auth.service';
 
 @Injectable({
